@@ -224,7 +224,7 @@ class ContextIO(object):
             except ValueError:
                 return response.text
         else:
-            return self._handle_request_error(response)
+            self._handle_request_error(response)
 
     def _request(self, url, method, params, headers={}, body=''):
         """This method actually makes the request using the oauth client.
@@ -277,8 +277,6 @@ class ContextIO(object):
                 )
         else:
             raise Exception(response.text)
-        
-        return response_json
 
     def get_accounts(self, **params):
         """List of Accounts.
