@@ -275,8 +275,7 @@ class ContextIO(object):
                         response_json['value']
                     )
                 )
-        else:
-            raise Exception(response.text)
+        raise Exception(response.text)
 
     def get_accounts(self, **params):
         """List of Accounts.
