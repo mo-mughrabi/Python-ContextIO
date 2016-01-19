@@ -127,7 +127,15 @@ def process_person_info(parent, person_info, addresses):
     return contacts, to_contacts, from_contact
 
 
-class ArgumentError(Exception):
+class CXAPIException(Exception):
+    """Base class of all exceptions raised by Context.io API."""
+
+
+class RequestError(CXAPIException):
+    """Class to handle request errors."""
+
+
+class ArgumentError(CXAPIException):
     """Class to handle bad arguments."""
     def __init__(self, message):
         self.message = message
@@ -262,34 +270,20 @@ class ContextIO(object):
         response_json = response.json()
         if isinstance(response_json, collections.Iterable):
             if 'feedback_code' in response_json:
-                raise Exception(
+                raise RequestError(
                     'HTTP %s: %s' % (
                         response.status_code,
                         response_json['feedback_code']
                     )
                 )
-            # elif 'code' in response_json and 'value' in response_json:
-            #     raise Exception(
-            #         'HTTP %s: %s' % (
-            #             response_json['code'],
-            #             response_json['value']
-            #         )
-            #     )
-            # elif 'type' in response_json and 'value' in response_json:
-            #     raise Exception(
-            #         '%s: %s' % (
-            #             response_json['type'],
-            #             response_json['value']
-            #         )
-            #     )
             else:
-                raise Exception(
+                raise RequestError(
                     'HTTP %s: %s' % (
                         response.status_code, response.text
                     )
                 )
         else:
-            raise Exception(
+            raise RequestError(
                     'HTTP %s: %s' % (
                         response.status_code, response.text
                     )
