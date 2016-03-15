@@ -278,23 +278,17 @@ class ContextIO(object):
         if isinstance(response_json, collections.Iterable):
             if 'feedback_code' in response_json:
                 raise RequestError(
-                    'HTTP %s: %s' % (
                         response.status_code,
                         response_json['feedback_code']
                     )
-                )
             else:
                 raise RequestError(
-                    'HTTP %s: %s' % (
                         response.status_code, response.text
                     )
-                )
         else:
             raise RequestError(
-                    'HTTP %s: %s' % (
                         response.status_code, response.text
                     )
-                )
 
     def get_accounts(self, **params):
         """List of Accounts.
