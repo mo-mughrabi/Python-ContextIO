@@ -134,6 +134,13 @@ class CXAPIException(Exception):
 class RequestError(CXAPIException):
     """Class to handle request errors."""
 
+    def __init__(self, status_code, message):
+        self.status_code = status_code
+        self.message = message
+
+    def __str__(self):
+        return 'HTTP {}: {}'.format(self.status_code, self.message)
+
 
 class ArgumentError(CXAPIException):
     """Class to handle bad arguments."""
@@ -271,23 +278,17 @@ class ContextIO(object):
         if isinstance(response_json, collections.Iterable):
             if 'feedback_code' in response_json:
                 raise RequestError(
-                    'HTTP %s: %s' % (
                         response.status_code,
                         response_json['feedback_code']
                     )
-                )
             else:
                 raise RequestError(
-                    'HTTP %s: %s' % (
                         response.status_code, response.text
                     )
-                )
         else:
             raise RequestError(
-                    'HTTP %s: %s' % (
                         response.status_code, response.text
                     )
-                )
 
     def get_accounts(self, **params):
         """List of Accounts.
